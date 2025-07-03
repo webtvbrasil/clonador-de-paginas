@@ -16,19 +16,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const cloneButton = document.getElementById('cloneButton');
 
     function updateCountdown() {
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            countdownElement.innerText = 'Oferta Liberada!';
+            cloneButton.classList.remove('disabled');
+            cloneButton.removeAttribute('disabled');
+            return; // Importante para sair da função
+        }
+
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
         countdownElement.innerText = `${minutes}:${seconds}`;
         timeLeft--;
-
-        if (timeLeft < 0) {
-            clearInterval(timerInterval);
-            countdownElement.innerText = 'Oferta Liberada!';
-            cloneButton.classList.remove('disabled');
-            cloneButton.removeAttribute('disabled');
-        }
     }
 
     updateCountdown();
@@ -37,8 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Timer final com redirecionamento
     let finalTimeLeft = 40 * 60; // 40 minutos em segundos
     const finalCountdownElement = document.getElementById('finalCountdown');
+    const checkoutURL = 'https://www.google.com'; // Substitua pelo link de checkout REAL
 
     function updateFinalCountdown() {
+        if (finalTimeLeft <= 0) {
+            clearInterval(finalTimerInterval);
+            window.location.href = checkoutURL; // Substitua pelo link de checkout
+            return; // Importante para sair da função
+        }
+
         let minutes = Math.floor(finalTimeLeft / 60);
         let seconds = finalTimeLeft % 60;
         minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -50,11 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         finalCountdownElement.innerHTML = `${styledMinutes}:${styledSeconds}`;
         finalTimeLeft--;
-
-        if (finalTimeLeft < 0) {
-            clearInterval(finalTimerInterval);
-            window.location.href = 'https://www.google.com'; // Substitua pelo link de checkout
-        }
     }
 
     updateFinalCountdown();
@@ -91,9 +94,10 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(showNotification, 10000);
 
     // Back Redirect
+    const backRedirectURL = 'https://www.google.com'; // Substitua pelo link de destino REAL
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function (event) {
         history.pushState(null, null, document.URL);
-        window.location.href = 'https://www.google.com'; // Substitua pelo link de destino
+        window.location.href = backRedirectURL; // Substitua pelo link de destino
     });
 });
